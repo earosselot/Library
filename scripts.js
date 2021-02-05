@@ -26,54 +26,88 @@ Book.prototype.info = function() {
 }
 
 
-function restoreDeleteButtons() {
-    deleteButtons = document.querySelectorAll('.delete');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const bookId = button.id;
-            const indexbookToDelete = myLibrary.findIndex(book => book._id == bookId);
-            myLibrary.splice(indexbookToDelete, 1);
-
-            let rowToDelete = button.parentElement;
-            rowToDelete.remove();
-        })
-    });
-}
-
-
 function addBookToDOM(book) {
-    let row = document.createElement('div');
+    const row = document.createElement('div');
     row.classList.add('row');
 
     Object.keys(book).forEach((val, key, arr) => {
         if (Object.is(arr.length - 1, key)) {
             row.setAttribute('data-id', book[val]);
-            let deleteButton = document.createElement('button');
+            const deleteButton = document.createElement('button');
             deleteButton.classList.add('btn', 'btn-danger', 'delete');
             deleteButton.id = book[val];
             deleteButton.textContent = 'x';
+
+            deleteButton.addEventListener('click', () => {
+                const indexbookToDelete = myLibrary.findIndex(book => book._id == deleteButton.id);
+                console.log(indexbookToDelete);
+                console.log(deleteButton.id)
+                myLibrary.splice(indexbookToDelete, 1);
+    
+                let rowToDelete = deleteButton.parentElement;
+                rowToDelete.remove();
+            })
+
             row.appendChild(deleteButton); 
         } else if (Object.is(arr.length - 2, key)) {
-            let col = document.createElement('div');
-            col.classList.add('col');
+
+            const col = document.createElement('div');
+            col.classList.add('col', 'form-check');
+
+            const readButton = document.createElement('input');
+            readButton.setAttribute('type', 'checkbox');
+            readButton.classList.add('read-button');
+
+            const readButtonLabel = document.createElement('label');
+            readButtonLabel.classList.add('form-chack-label');
+
             if (book[val]) {
-                col.textContent = 'Read';
+                readButtonLabel.textContent = 'read';
+                readButton.checked = true;
             } else {
-                col.textContent = 'Not Read Yet';
+                readButtonLabel.textContent = 'not read';
+                readButton.checked = false;
             }
-            row.appendChild(col);
             
+            readButton.addEventListener('change', (event) => {
+                bookId = event.currentTarget.parentElement.parentElement.dataset.id;
+                const indexReadBook = myLibrary.findIndex(book => book._id == bookId);
+             
+                const sibilingLabbel = readButton.nextSibling;
+
+                if (event.currentTarget.checked) {
+                    sibilingLabbel.textContent = 'read';
+                    myLibrary[indexReadBook]['read'] = true;
+                } else {
+                    sibilingLabbel.textContent = 'not read';
+                    myLibrary[indexReadBook]['read'] = false;
+                }
+            });
+
+            col.appendChild(readButton);
+            col.appendChild(readButtonLabel);
+            row.appendChild(col);
+
+            // Bootstrap switches. I can't make an event listener that works for them
+            // const switchButton = document.createElement('input');
+            // switchButton.setAttribute('type', 'checkbox');
+            // switchButton.classList.add('read-switch');
+            // switchButton.setAttribute('data-toggle', 'toggle');
+            // switchButton.setAttribute('data-on', 'Read');
+            // switchButton.setAttribute('data-off', 'Not Read');
+            // switchButton.setAttribute('data-onstyle', 'success');
+            // switchButton.setAttribute('data-offstyle', 'secondary');
+            // col.appendChild(switchButton);
         } else {
-            let col = document.createElement('div');
+            const col = document.createElement('div');
             col.classList.add('col');
             col.textContent = book[val];
             row.appendChild(col);
         }
     });
     libraryTable.appendChild(row);
-    restoreDeleteButtons();
+    // restoreDeleteButtons();
 }
-
 
 function addBookToLibrary(title, author, pages, read) {
     let newBook = new Book(title, author, pages, read);
@@ -83,7 +117,6 @@ function addBookToLibrary(title, author, pages, read) {
 
 
 function bookSubmit(event) {
-
     const title = newBookForm.elements["book-title"].value;
     const author = newBookForm.elements["book-author"].value;
     const pages = newBookForm.elements["book-pages"].value;
@@ -101,3 +134,25 @@ newBookForm.addEventListener('submit', bookSubmit);
 addBookToLibrary('Hobbit', 'Tolkien', 540, true);
 addBookToLibrary('harry Potter', 'Rowling', 246, true);
 addBookToLibrary('caperucita', 'Anonimo', 30, false);
+
+const testButton = document.querySelector('.test');
+const testP = document.querySelector('.p-test');
+
+
+// function onToggle() {
+//     if (buttonPrueba.checked) {
+//         alert('cheked');
+//     } else {
+//         alert('not chkd');
+//     }
+// }
+
+testButton.addEventListener('change', () => {
+    // if (test.checked) {
+    //             alert('cheked');
+    //         } else {
+    //             alert('not chkd');
+    //         }
+    console.log(testButton.checked);
+    testP.textContent = 'camina';
+});
