@@ -112,8 +112,8 @@ function addBookToDOM(book) {
         }
     });
     libraryTable.appendChild(row);
-    // restoreDeleteButtons();
 }
+
 
 function addBookToLibrary(title, author, pages, read) {
     let newBook = new Book(title, author, pages, read);
@@ -135,30 +135,3 @@ function bookSubmit(event) {
 
 const newBookForm = document.forms['new-book'];
 newBookForm.addEventListener('submit', bookSubmit);
-
-
-addBookToLibrary('Hobbit', 'Tolkien', 540, true);
-addBookToLibrary('harry Potter', 'Rowling', 246, true);
-addBookToLibrary('caperucita', 'Anonimo', 30, false);
-
-const testButton = document.querySelector('.test');
-const testP = document.querySelector('.p-test');
-
-
-// function onToggle() {
-//     if (buttonPrueba.checked) {
-//         alert('cheked');
-//     } else {
-//         alert('not chkd');
-//     }
-// }
-
-testButton.addEventListener('change', () => {
-    // if (test.checked) {
-    //             alert('cheked');
-    //         } else {
-    //             alert('not chkd');
-    //         }
-    console.log(testButton.checked);
-    testP.textContent = 'camina';
-});
