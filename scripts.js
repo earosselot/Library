@@ -33,6 +33,10 @@ function addBookToDOM(book) {
     Object.keys(book).forEach((val, key, arr) => {
         if (Object.is(arr.length - 1, key)) {
             row.setAttribute('data-id', book[val]);
+
+            const col = document.createElement('div');
+            col.classList.add('col-1', 'text-center');
+
             const deleteButton = document.createElement('button');
             deleteButton.classList.add('btn', 'btn-danger', 'delete');
             deleteButton.id = book[val];
@@ -44,15 +48,16 @@ function addBookToDOM(book) {
                 console.log(deleteButton.id)
                 myLibrary.splice(indexbookToDelete, 1);
     
-                let rowToDelete = deleteButton.parentElement;
+                let rowToDelete = deleteButton.parentElement.parentElement;
                 rowToDelete.remove();
             })
 
-            row.appendChild(deleteButton); 
+            col.appendChild(deleteButton); 
+            row.appendChild(col);
         } else if (Object.is(arr.length - 2, key)) {
 
             const col = document.createElement('div');
-            col.classList.add('col', 'form-check');
+            col.classList.add('col', 'text-center', 'form-check');
 
             const readButton = document.createElement('input');
             readButton.setAttribute('type', 'checkbox');
@@ -98,9 +103,10 @@ function addBookToDOM(book) {
             // switchButton.setAttribute('data-onstyle', 'success');
             // switchButton.setAttribute('data-offstyle', 'secondary');
             // col.appendChild(switchButton);
+            
         } else {
             const col = document.createElement('div');
-            col.classList.add('col');
+            col.classList.add('col', 'text-center');
             col.textContent = book[val];
             row.appendChild(col);
         }
